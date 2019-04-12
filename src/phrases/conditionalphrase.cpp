@@ -57,7 +57,7 @@ ConditionalPhrase::ConditionalPhrase(AbstractFieldPhrase *l,
                                      PhraseData::Condition cond,
                                      const QVariant &v)
 {
-    data = new PhraseData(l->data, cond, v);
+    data = new PhraseData(*l->data, cond, v);
 }
 
 ConditionalPhrase::ConditionalPhrase(AbstractFieldPhrase *l,

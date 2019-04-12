@@ -690,7 +690,7 @@ QString SqlGeneratorBase::insertCommand(const QString &tableName, const Assignme
             values.append(", ");
 
         fieldNames.append(d->left->fieldName);
-        values.append(escapeValue(d->operand));
+        values.append(escapeValue(*d->operand));
     }
     return QString("INSERT INTO %1 (%2) VALUES (%3);")
               .arg(tableName, fieldNames, values);
@@ -848,7 +848,7 @@ QString SqlGeneratorBase::phrase(const PhraseData *d) const
 
     case PhraseData::WithVariant:
         ret = phrase(d->left) + " " + operatorString(d->operatorCond) + " "
-              + escapeValue(d->operand);
+              + escapeValue(*d->operand);
         break;
 
     case PhraseData::WithOther:
@@ -965,43 +965,43 @@ QString SqlGeneratorBase::createConditionalPhrase(const PhraseData *d) const
     case PhraseData::WithVariant:
         if (op == PhraseData::AddYears)
             ret = QString("DATEADD(year, %1, %2)")
-                    .arg(d->operand.toString(), createConditionalPhrase(d->left));
+                    .arg(d->operand->toString(), createConditionalPhrase(d->left));
         else if (op == PhraseData::AddMonths)
             ret = QString("DATEADD(month, %1, %2)")
-                    .arg(d->operand.toString(), createConditionalPhrase(d->left));
+                    .arg(d->operand->toString(), createConditionalPhrase(d->left));
         else if (op == PhraseData::AddDays)
             ret = QString("DATEADD(day, %1, %2)")
-                    .arg(d->operand.toString(), createConditionalPhrase(d->left));
+                    .arg(d->operand->toString(), createConditionalPhrase(d->left));
         else if (op == PhraseData::AddHours)
             ret = QString("DATEADD(hour, %1, %2)")
-                    .arg(d->operand.toString(), createConditionalPhrase(d->left));
+                    .arg(d->operand->toString(), createConditionalPhrase(d->left));
         else if (op == PhraseData::AddMinutes)
             ret = QString("DATEADD(minute, %1, %2)")
-                    .arg(d->operand.toString(), createConditionalPhrase(d->left));
+                    .arg(d->operand->toString(), createConditionalPhrase(d->left));
         else if (op == PhraseData::AddSeconds)
             ret = QString("DATEADD(second, %1, %2)")
-                    .arg(d->operand.toString(), createConditionalPhrase(d->left));
+                    .arg(d->operand->toString(), createConditionalPhrase(d->left));
         else if (op == PhraseData::DatePartYear)
             ret = QString("DATEPART(year, %1)")
-                    .arg(d->operand.toString());
+                    .arg(d->operand->toString());
         else if (op == PhraseData::DatePartMonth)
             ret = QString("DATEPART(month, %1)")
-                    .arg(d->operand.toString());
+                    .arg(d->operand->toString());
         else if (op == PhraseData::DatePartDay)
             ret = QString("DATEPART(day, %1)")
-                    .arg(d->operand.toString());
+                    .arg(d->operand->toString());
         else if (op == PhraseData::DatePartHour)
             ret = QString("DATEPART(hour, %1)")
-                    .arg(d->operand.toString());
+                    .arg(d->operand->toString());
         else if (op == PhraseData::DatePartMinute)
             ret = QString("DATEPART(minute, %1)")
-                    .arg(d->operand.toString());
+                    .arg(d->operand->toString());
         else if (op == PhraseData::DatePartMilisecond)
             ret = QString("DATEPART(milisecond, %1)")
-                    .arg(d->operand.toString());
+                    .arg(d->operand->toString());
         else
             ret = createConditionalPhrase(d->left) + " " + operatorString(op) + " "
-              + escapeValue(d->operand);
+              + escapeValue(*d->operand);
         break;
 
     case PhraseData::WithOther:
@@ -1059,7 +1059,7 @@ void SqlGeneratorBase::createInsertPhrase(const AssignmentPhraseList &ph, QStrin
         switch (d->type) {
         case PhraseData::WithVariant:
             fields.append(d->left->toString());
-            values.append(escapeValue(d->operand));
+            values.append(escapeValue(*d->operand));
 //            ret = createConditionalPhrase(d->left->toString()) + " " + operatorString(d->operatorCond) + " "
 //                  + escapeValue(d->operand);
             break;

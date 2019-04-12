@@ -25,22 +25,12 @@ NUT_BEGIN_NAMESPACE
 PhraseData::PhraseData() :
     className(""), fieldName(""),
     type(Field), operatorCond(NotAssign),
-    left(nullptr), right(nullptr), operand(QVariant::Invalid), isNot(false), parents(1)
+    left(nullptr), right(nullptr), operand(nullptr), isNot(false), parents(1)
 { }
 
-PhraseData::PhraseData(const char *className, const char *fieldName) :
-    className(className), fieldName(fieldName),
-    type(Field), operatorCond(NotAssign),
-    left(nullptr), right(nullptr), operand(QVariant::Invalid), isNot(false), parents(1)
-{ }
 
-PhraseData::PhraseData(PhraseData *l, PhraseData::Condition o)
-    : className(nullptr), fieldName(nullptr),
-      type(WithoutOperand), operatorCond(o), left(l), right(nullptr),
-      isNot(false), parents(1)
-{
-    l->parents++;
-}
+
+
 
 PhraseData::PhraseData(PhraseData *l, PhraseData::Condition o,
                        PhraseData *r)
@@ -56,7 +46,7 @@ PhraseData::PhraseData(PhraseData *l, PhraseData::Condition o,
 PhraseData::PhraseData(PhraseData *l, PhraseData::Condition o, QVariant r)
     : className(nullptr), fieldName(nullptr),
       type(WithVariant), operatorCond(o), left(l),
-      right(nullptr), operand(r), isNot(false), parents(1)
+      right(nullptr), operand(&r), isNot(false), parents(1)
 { }
 
 PhraseData *PhraseData::operator =(PhraseData *other)

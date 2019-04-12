@@ -27,15 +27,21 @@
 #include "conditionalphrase.h"
 #include "phraselist.h"
 
+#include <QSharedPointer>
+
 NUT_BEGIN_NAMESPACE
 
 class PhraseData;
 class NUT_EXPORT AbstractFieldPhrase
 {
 public:
-    PhraseData *data;
+    QSharedPointer<PhraseData> data;
     explicit AbstractFieldPhrase(PhraseData *d);
-    AbstractFieldPhrase(const char *className, const char *fieldName);
+    constexpr AbstractFieldPhrase(const char *className, const char *fieldName)
+//        :data(QSharedPointer PhraseData{className, fieldName})
+    {
+//        data.reset(new PhraseData{className, fieldName});
+    }
     AbstractFieldPhrase(const AbstractFieldPhrase &other);
     AbstractFieldPhrase(AbstractFieldPhrase &&other);
 
@@ -53,9 +59,10 @@ public:
         return ConditionalPhrase(this, PhraseData::In, vlist);
     }
 #ifdef Q_COMPILER_INITIALIZER_LISTS
-    ConditionalPhrase in(std::initializer_list<int> list) {
+    template<typename T>
+    ConditionalPhrase in(std::initializer_list<T> list) {
         QVariantList vlist;
-        std::initializer_list<int>::iterator it;
+        typename std::initializer_list<T>::iterator it;
         for (it = list.begin(); it != list.end(); ++it)
             vlist.append(*it);
         return ConditionalPhrase(this, PhraseData::In, vlist);

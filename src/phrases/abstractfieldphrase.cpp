@@ -22,35 +22,33 @@
 
 NUT_BEGIN_NAMESPACE
 
-AbstractFieldPhrase::AbstractFieldPhrase(PhraseData *d) : data(d)
-{ }
-
-AbstractFieldPhrase::AbstractFieldPhrase(const char *className,
-                                         const char *fieldName)
-    :data(new PhraseData(className, fieldName))
+AbstractFieldPhrase::AbstractFieldPhrase(PhraseData *d)// : data(*d)
 {
+    data.reset(d);
 }
 
-AbstractFieldPhrase::AbstractFieldPhrase(const AbstractFieldPhrase &other)
+
+
+AbstractFieldPhrase::AbstractFieldPhrase(const AbstractFieldPhrase &other) : data(other.data)
 {
-    data = other.data;
-    data->parents++;
+//    data = other.data;
+//    data.parents++;
 }
 
 AbstractFieldPhrase::AbstractFieldPhrase(AbstractFieldPhrase &&other)
 {
     data = other.data;
-    data->parents++;
-    other.data = nullptr;
+//    data->parents++;
+//    other.data = nullptr;
 }
 
 AbstractFieldPhrase::~AbstractFieldPhrase()
 {
-    if (data) {
-        --data->parents;
-        if (data->parents <= 0)
-            delete data;
-    }
+//    if (data) {
+//        --data->parents;
+//        if (data->parents <= 0)
+//            delete data;
+//    }
 }
 
 PhraseList AbstractFieldPhrase::operator |(const AbstractFieldPhrase &other)

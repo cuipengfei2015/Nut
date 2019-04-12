@@ -87,13 +87,23 @@ public:
     PhraseData *left;
     PhraseData *right;
 
-    QVariant operand;
+    QVariant *operand;
     bool isNot;
     quint16 parents;
 
     PhraseData();
-    PhraseData(const char *className, const char *fieldName);
-    PhraseData(PhraseData *l, Condition o);
+    constexpr PhraseData(const char *className, const char *fieldName) :
+        className(className), fieldName(fieldName),
+        type(Field), operatorCond(NotAssign),
+        left(nullptr), right(nullptr), operand(nullptr), isNot(false), parents(1)
+    { }
+    constexpr PhraseData(PhraseData *l, Condition o)
+        : className(nullptr), fieldName(nullptr),
+          type(WithoutOperand), operatorCond(o),
+          left(l), right(nullptr), operand(nullptr), isNot(false), parents(1)
+    {
+        l->parents++;
+    }
     PhraseData(PhraseData *l, Condition o, PhraseData *r);
     PhraseData(PhraseData *l, Condition o, QVariant r);
 //    explicit PhraseData(const PhraseData &other);

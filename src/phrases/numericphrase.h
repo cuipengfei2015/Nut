@@ -19,7 +19,7 @@ class FieldPhrase<T, typename std::enable_if<
         : public AbstractFieldPhrase
 {
 public:
-    FieldPhrase(const char *className, const char *s) :
+    constexpr FieldPhrase(const char *className, const char *s) :
         AbstractFieldPhrase(className, s)
     {}
 
